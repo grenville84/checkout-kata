@@ -28,5 +28,28 @@ namespace Kata.Checkout.Tests
             Assert.AreEqual(1, checkout.Transactions.Count);
             Assert.AreEqual(sku, checkout.Transactions.First()?.Sku);
         }
+
+        [Test]
+        public void CheckoutReturnsCorrectTotalPriceForNoItems()
+        {
+            var checkout = new Logic.Checkout();
+
+            const decimal anticipatedPrice = 0m;
+
+            Assert.AreEqual(anticipatedPrice, checkout.TotalPrice);
+        }
+
+        [Test]
+        public void CheckoutReturnsCorrectTotalPriceForTwoItems()
+        {
+            var checkout = new Logic.Checkout();
+
+            checkout.Scan(AppleSku);
+            checkout.Scan(ChocolateSku);
+
+            const decimal anticipatedPrice = 1.1m;
+
+            Assert.AreEqual(anticipatedPrice, checkout.TotalPrice);
+        }
     }
 }

@@ -11,6 +11,8 @@ namespace Kata.Checkout.Logic
 
         public IList<Item> Transactions => _transactionItems.ToList().AsReadOnly();
 
+        public decimal TotalPrice => _transactionItems.Sum(t => t.Price);
+
         public Checkout()
         {
             _transactionItems = new List<Item>();
