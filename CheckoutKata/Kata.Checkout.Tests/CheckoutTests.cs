@@ -51,5 +51,66 @@ namespace Kata.Checkout.Tests
 
             Assert.AreEqual(anticipatedPrice, checkout.TotalPrice);
         }
+
+        [Test]
+        public void ScanningThreeApplesAppliesOffer()
+        {
+            var checkout = new Logic.Checkout();
+
+            checkout.Scan(AppleSku);
+            checkout.Scan(AppleSku);
+            checkout.Scan(AppleSku);
+
+            const decimal anticipatedPrice = 1.3m;
+
+            Assert.AreEqual(anticipatedPrice, checkout.TotalPrice);
+        }
+
+        [Test]
+        public void ScanningTwoBananasAppliesOffer()
+        {
+            var checkout = new Logic.Checkout();
+
+            checkout.Scan(BananaSku);
+            checkout.Scan(BananaSku);
+
+            const decimal anticipatedPrice = 0.45m;
+
+            Assert.AreEqual(anticipatedPrice, checkout.TotalPrice);
+        }
+
+        [Test]
+        public void ScanningFourBananasAppliesOfferTwice()
+        {
+            var checkout = new Logic.Checkout();
+
+            checkout.Scan(BananaSku);
+            checkout.Scan(BananaSku);
+            checkout.Scan(BananaSku);
+            checkout.Scan(BananaSku);
+
+            const decimal anticipatedPrice = 0.9m;
+
+            Assert.AreEqual(anticipatedPrice, checkout.TotalPrice);
+        }
+
+        [Test]
+        public void ScanningAssortmentOfItemsGivesCorrectTotalPriceWithOffers()
+        {
+            var checkout = new Logic.Checkout();
+
+            checkout.Scan(AppleSku);
+            checkout.Scan(BananaSku);
+            checkout.Scan(BananaSku);
+            checkout.Scan(ChocolateSku);
+            checkout.Scan(AppleSku);
+            checkout.Scan(AppleSku);
+            checkout.Scan(AppleSku);
+            checkout.Scan(BananaSku);
+
+            const decimal anticipatedPrice = 3.15m;
+
+            Assert.AreEqual(anticipatedPrice, checkout.TotalPrice);
+        }
     }
 }
