@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 
@@ -15,7 +16,6 @@ namespace Kata.Checkout.Tests
 
         }
 
-        [Test]
         [TestCase(AppleSku)]
         [TestCase(BananaSku)]
         [TestCase(ChocolateSku)]
@@ -27,6 +27,18 @@ namespace Kata.Checkout.Tests
 
             Assert.AreEqual(1, checkout.Transactions.Count);
             Assert.AreEqual(sku, checkout.Transactions.First()?.ItemSku);
+        }
+
+        [TestCase(AppleSku)]
+        [TestCase(BananaSku)]
+        [TestCase(ChocolateSku)]
+        public void CheckoutScanInValidItemThrowsArgumentError(string sku)
+        {
+            var checkout = new Logic.Checkout();
+
+            const string invalidSku = "D32";
+
+            Assert.Throws<ArgumentException>(() => checkout.Scan(invalidSku));
         }
 
         [Test]
