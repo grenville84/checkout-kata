@@ -5,6 +5,10 @@ namespace Kata.Checkout.Tests
 {
     public class CheckoutTests
     {
+        private const string AppleSku = "A99";
+        private const string BananaSku = "B15";
+        private const string ChocolateSku = "C40";
+
         [SetUp]
         public void Setup()
         {
@@ -12,9 +16,9 @@ namespace Kata.Checkout.Tests
         }
 
         [Test]
-        [TestCase("A99")]
-        [TestCase("B15")]
-        [TestCase("C40")]
+        [TestCase(AppleSku)]
+        [TestCase(BananaSku)]
+        [TestCase(ChocolateSku)]
         public void CheckoutCanScanValidItem(string sku)
         {
             var checkout = new Logic.Checkout();
