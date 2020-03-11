@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 
 namespace Kata.Checkout.Tests
@@ -7,12 +8,21 @@ namespace Kata.Checkout.Tests
         [SetUp]
         public void Setup()
         {
+
         }
 
         [Test]
-        public void Test1()
+        [TestCase("A99")]
+        [TestCase("B15")]
+        [TestCase("C40")]
+        public void CheckoutCanScanValidItem(string sku)
         {
-            Assert.Pass();
+            var checkout = new Logic.Checkout();
+
+            checkout.Scan(sku);
+
+            Assert.AreEqual(1, checkout.Transactions.Count);
+            Assert.AreEqual(sku, checkout.Transactions.First()?.Sku);
         }
     }
 }
