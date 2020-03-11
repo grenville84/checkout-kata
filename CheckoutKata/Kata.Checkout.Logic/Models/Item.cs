@@ -1,16 +1,12 @@
 ﻿namespace Kata.Checkout.Logic.Models
 {
-    public class Item
+    public class Item : Transaction
     {
-        public string Sku { get; }
         public string Name { get; }
-        public decimal Price { get; }
 
-        public Item(string sku, string name, decimal price)
+        public Item(string sku, string name, decimal price) : base(TransactionType.ItemPurchased, sku, price)
         {
-            Sku = sku;
             Name = name;
-            Price = price;
         }
     }
 }
