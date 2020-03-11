@@ -7,15 +7,15 @@ namespace Kata.Checkout.Logic
 {
     public class Checkout
     {
-        private readonly List<Item> _transactionItems;
+        private readonly List<Transaction> _transactionItems;
 
-        public IList<Item> Transactions => _transactionItems.ToList().AsReadOnly();
+        public IList<Transaction> Transactions => _transactionItems.ToList().AsReadOnly();
 
         public decimal TotalPrice => _transactionItems.Sum(t => t.Price);
 
         public Checkout()
         {
-            _transactionItems = new List<Item>();
+            _transactionItems = new List<Transaction>();
         }
 
         public void Scan(string sku)
