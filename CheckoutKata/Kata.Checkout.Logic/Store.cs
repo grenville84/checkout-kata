@@ -11,5 +11,11 @@ namespace Kata.Checkout.Logic
             new Item("B15", "Banana", 0.3m),
             new Item("C40", "Chocolate", 0.6m)
         };
+
+        public static IList<Offer> AvailableOffers = new List<Offer>
+        {
+            new Offer("A99", -0.2m, 3),
+            new Offer("B15", -0.15m, 2)
+        };
     }
 }

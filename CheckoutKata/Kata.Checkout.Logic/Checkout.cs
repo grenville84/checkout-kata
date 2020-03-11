@@ -28,7 +28,7 @@ namespace Kata.Checkout.Logic
 
         private static bool TryFindItemBySku(string sku, out Item foundItem)
         {
-            var searchItem = Store.AvailableItems.FirstOrDefault(i => i.Sku == sku);
+            var searchItem = Store.AvailableItems.FirstOrDefault(i => i.ItemSku == sku);
 
             if (searchItem == null)
             {

@@ -26,7 +26,7 @@ namespace Kata.Checkout.Tests
             checkout.Scan(sku);
 
             Assert.AreEqual(1, checkout.Transactions.Count);
-            Assert.AreEqual(sku, checkout.Transactions.First()?.Sku);
+            Assert.AreEqual(sku, checkout.Transactions.First()?.ItemSku);
         }
 
         [Test]
