@@ -7,14 +7,24 @@ namespace Kata.Checkout.Logic
 {
     public class Checkout
     {
+        private readonly IPlasticBagPolicy _plasticBagPolicy;
         private readonly List<ITransactable> _transactionItems;
 
         public IList<ITransactable> Transactions => _transactionItems.ToList().AsReadOnly();
 
-        public decimal TotalPrice => _transactionItems.Sum(t => t.TransactionValue);
-
-        public Checkout()
+        public decimal TotalPrice
         {
+            get
+            {
+                decimal bagPrice = BagsRequired * _plasticBagPolicy.CostPerBag;
+
+                return _transactionItems.Sum(t => t.TransactionValue) + bagPrice;
+            }
+        }
+
+        public Checkout(IPlasticBagPolicy plasticBagPolicy)
+        {
+            _plasticBagPolicy = plasticBagPolicy;
             _transactionItems = new List<ITransactable>();
         }
 
@@ -34,6 +44,32 @@ namespace Kata.Checkout.Logic
             if (TryFindOfferByItemSku(scannedItem.ItemSku, _transactionItems, out ITransactable applicableOffer))
             {
                 _transactionItems.Add(applicableOffer);
+            }
+        }
+
+        public void Scan(string sku, int countOfItem)
+        {
+            for (int i = 0; i < countOfItem; i++)
+            {
+                Scan(sku);
+            }
+        }
+
+        public int BagsRequired
+        {
+            get
+            {
+                int numberOfItems = _transactionItems.Count(t => t.TransactionType == TransactionType.ItemPurchased);
+
+
+                if (numberOfItems == 0 || _plasticBagPolicy.MaxItemsPerBag == 0)
+                {
+                    return 0;
+                }
+
+                decimal bagsRequired = Math.Ceiling(numberOfItems / (decimal)_plasticBagPolicy.MaxItemsPerBag);
+
+                return (int) bagsRequired;
             }
         }
 
