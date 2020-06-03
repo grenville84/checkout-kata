@@ -7,22 +7,22 @@ namespace Kata.Checkout.Logic
 {
     public class Checkout
     {
-        private readonly List<Transaction> _transactionItems;
+        private readonly List<ITransactable> _transactionItems;
 
-        public IList<Transaction> Transactions => _transactionItems.ToList().AsReadOnly();
+        public IList<ITransactable> Transactions => _transactionItems.ToList().AsReadOnly();
 
-        public decimal TotalPrice => _transactionItems.Sum(t => t.Price);
+        public decimal TotalPrice => _transactionItems.Sum(t => t.TransactionValue);
 
         public Checkout()
         {
-            _transactionItems = new List<Transaction>();
+            _transactionItems = new List<ITransactable>();
         }
 
         public void Scan(string sku)
         {
             // lookup item and add to transaction
 
-            if (!TryFindItemBySku(sku, out Item scannedItem))
+            if (!TryFindItemBySku(sku, out ITransactable scannedItem))
             {
                 throw new ArgumentException($"{sku} is not a valid item SKU.", nameof(sku));
             }
@@ -31,13 +31,13 @@ namespace Kata.Checkout.Logic
 
             // check if any discounts are triggered by this purchase and add as transaction if so
 
-            if (TryFindOfferByItemSku(scannedItem.ItemSku, _transactionItems, out Offer applicableOffer))
+            if (TryFindOfferByItemSku(scannedItem.ItemSku, _transactionItems, out ITransactable applicableOffer))
             {
                 _transactionItems.Add(applicableOffer);
             }
         }
 
-        private static bool TryFindItemBySku(string sku, out Item foundItem)
+        private static bool TryFindItemBySku(string sku, out ITransactable foundItem)
         {
             var searchItem = Store.AvailableItems.FirstOrDefault(i => i.ItemSku == sku);
 
@@ -51,14 +51,14 @@ namespace Kata.Checkout.Logic
             return true;
         }
 
-        private static bool TryFindOfferByItemSku(string sku, IEnumerable<Transaction> transactions, out Offer foundOffer)
+        private static bool TryFindOfferByItemSku(string sku, IEnumerable<ITransactable> transactions, out ITransactable foundOffer)
         {
             var itemOffer = Store.AvailableOffers.FirstOrDefault(i => i.ItemSku == sku);
 
             if (itemOffer != null)
             {
                 int itemTransactionCount =
-                    transactions.Count(t => t.Type == TransactionType.ItemPurchased && t.ItemSku == sku);
+                    transactions.Count(t => t.TransactionType == TransactionType.ItemPurchased && t.ItemSku == sku);
 
                 bool offerAppliesAtCurrentPurchaseCount = itemTransactionCount % itemOffer.TriggerAtItemCount == 0;
 
